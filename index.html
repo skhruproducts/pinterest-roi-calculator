@@ -921,7 +921,7 @@ input:focus-visible {
 
     <div class="slider-area">
       <input type="range" id="projSlider" min="0" max="100000" value="0" aria-label="Projected orders">
-      <div class="scale-labels">
+      <div class="scale-labels" id="scaleLabels">
         <span>0</span>
         <span>33,000</span>
         <span>66,000</span>
@@ -1251,10 +1251,29 @@ function render() {
 
   var slider = document.getElementById("projSlider");
   var projInput = document.getElementById("projectedInput");
+
+  var sliderMax = 100000;
+  if (v.canCalc && v.breakEven > 0) {
+    var nice = Math.ceil(v.breakEven * 5);
+    var magnitude = Math.pow(10, Math.floor(Math.log10(nice)));
+    sliderMax = Math.max(Math.ceil(nice / magnitude) * magnitude, 50);
+  }
+  slider.max = sliderMax;
+
+  var scaleLabels = document.getElementById("scaleLabels");
+  if (scaleLabels) {
+    var q1 = Math.round(sliderMax * 0.33);
+    var q2 = Math.round(sliderMax * 0.66);
+    scaleLabels.innerHTML =
+      '<span>0</span><span>' + formatNumber(q1) +
+      '</span><span>' + formatNumber(q2) +
+      '</span><span>' + formatNumber(sliderMax) + '</span>';
+  }
+
   if (state.projectedOrders !== "") {
-    slider.value = clampNumber(state.projectedOrders, 0, 100000);
+    slider.value = clampNumber(state.projectedOrders, 0, sliderMax);
   } else if (v.canCalc) {
-    slider.value = Math.min(v.breakEven, 100000);
+    slider.value = Math.min(v.breakEven, sliderMax);
   } else {
     slider.value = 0;
   }
@@ -1320,6 +1339,8 @@ document.getElementById("avgOrderInput").addEventListener("input", function(e) {
 
 document.getElementById("projectedInput").addEventListener("input", function(e) {
   state.projectedOrders = cleanInput(e.target.value.replace(/[^0-9.]/g, ""));
+  var slider = document.getElementById("projSlider");
+  slider.value = Math.min(Number(state.projectedOrders) || 0, Number(slider.max));
   render();
 });
 
