@@ -15,6 +15,10 @@ Given a monthly Pinterest investment and either a minimum or average order value
 
 It supports English and Ukrainian, and EUR/USD/UAH currency display.
 
+## How this was built
+
+Started as a rough break-even model, then rebuilt as an interactive calculator through iterative AI-assisted prototyping — first scoped to a single brand, then generalized into a universal, brand-agnostic tool. Refined over several passes: full input editability, English/Ukrainian bilingual support, EUR/USD/UAH currency switching, and UX polish (number formatting, mobile layout, a projection slider that scales to the break-even point instead of a fixed cap).
+
 ## Tech
 
 Plain HTML, CSS, and vanilla JavaScript — no frameworks, no dependencies, no build tooling. All calculation logic lives in a single `<script>` block in `index.html`.
