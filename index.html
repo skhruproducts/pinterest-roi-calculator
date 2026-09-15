@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinterest ROI Calculator</title>
+<style>
+@font-face {
+  font-family: 'Creato Display';
+  src: url('fonts/CreatoDisplay-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Creato Display';
+  src: url('fonts/CreatoDisplay-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Creato Display';
+  src: url('fonts/CreatoDisplay-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Creato Display';
+  src: url('fonts/CreatoDisplay-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Creato Display';
+  src: url('fonts/CreatoDisplay-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f6f1ed;
+  color: #1d1714;
+  font-family: 'Creato Display', Georgia, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrapper {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .wrapper { padding: 1.25rem; }
+}
+
+/* Header */
+.header {
+  text-align: left;
+  margin-bottom: 3rem;
+  animation: headerFadeIn 0.8s ease-out both;
+}
+
+@keyframes headerFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.75rem;
+  color: #8f8a86;
+  margin-bottom: 1rem;
+}
+
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.header-controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #aaa4a0;
+}
+
+.segmented {
+  display: inline-flex;
+  background: #fff;
+  border: 1px solid #ded6cf;
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.segmented [role="radio"] {
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-family: 'Creato Display', Georgia, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: #9b948f;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+
+.segmented [role="radio"]:hover {
+  color: #1d1714;
+}
+
+.segmented [role="radio"]:focus-visible {
+  box-shadow: 0 0 0 2px #f37c2b;
+}
+
+.segmented [role="radio"][aria-checked="true"] {
+  background: #1d1714;
+  color: #fff;
+}
+
+.title {
+  font-size: clamp(3rem, 8vw, 8rem);
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+  margin-bottom: 1.25rem;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+  color: #8f8a86;
+  max-width: 55rem;
+  line-height: 1.35;
+  font-weight: 400;
+  margin-top: 2rem;
+}
+
+/* Main grid */
+.main-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+/* Input panel */
+.input-panel {
+  background: #fff;
+  border-radius: 2rem;
+  padding: 2.5rem;
+  border: 1px solid #e2d9d1;
+}
+
+.section-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #aaa4a0;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  color: #8f8a86;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.field {
+  margin-bottom: 1.75rem;
+}
+
+.field:last-child { margin-bottom: 0; }
+
+.field-label {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.65rem;
+  color: #8f8a86;
+  margin-bottom: 0.5rem;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: #fbf8f6;
+  border: 1px solid #e2d9d1;
+  border-radius: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.input-wrap:focus-within {
+  border-color: #f37c2b;
+}
+
+.input-wrap.readonly {
+  background: #f0ebe7;
+  border-color: #ede7e2;
+}
+
+.currency-prefix {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: #bbb5b0;
+  margin-right: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.number-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: 'Creato Display', Georgia, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #1d1714;
+  outline: none;
+  width: 100%;
+}
+
+.number-input::placeholder {
+  color: #d2cbc5;
+}
+
+.number-input:disabled {
+  color: #c9c1ba;
+}
+
+.readonly-value {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #1d1714;
+}
+
+.field-help {
+  font-size: 0.78rem;
+  color: #b7b1ad;
+  margin-top: 0.4rem;
+  line-height: 1.4;
+}
+
+/* Break-even panel */
+.breakeven-panel {
+  background: #1b130f;
+  border-radius: 2rem;
+  padding: 2.5rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.decorative-circle {
+  position: absolute;
+  top: -4rem;
+  right: -4rem;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+  background: #3a1f15;
+  pointer-events: none;
+}
+
+.breakeven-label {
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.7rem;
+  color: #aaa4a0;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.breakeven-number {
+  font-size: clamp(4rem, 10vw, 9rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+  color: #f37c2b;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  font-weight: 400;
+}
+
+.breakeven-suffix {
+  font-size: 1.5rem;
+  color: #aaa4a0;
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+.breakeven-sentence {
+  font-size: 1rem;
+  color: #aaa4a0;
+  margin-top: 1.5rem;
+  line-height: 1.5;
+  position: relative;
+}
+
+.breakeven-sentence strong {
+  color: #f37c2b;
+  font-weight: 400;
+}
+
+.earning-sentence {
+  font-size: 0.9rem;
+  color: #8f8a86;
+  margin-top: 0.75rem;
+  position: relative;
+}
+
+.waiting-message {
+  font-size: 1.25rem;
+  color: #aaa4a0;
+  position: relative;
+}
+
+/* Summary cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .summary-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .summary-cards { grid-template-columns: 1fr; }
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid #e2d9d1;
+  border-radius: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 7rem;
+}
+
+.summary-card-label {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.6rem;
+  color: #aaa4a0;
+  min-height: 2.4rem;
+  line-height: 1.35;
+}
+
+.summary-card-value {
+  font-size: 1.75rem;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  margin-top: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scenarios */
+.scenarios-section {
+  background: #fff;
+  border: 1px solid #e2d9d1;
+  border-radius: 2rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.scenarios-header {
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid #ede7e2;
+}
+
+.scenarios-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #aaa4a0;
+  margin: 0;
+}
+
+.scenario-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #f0ebe7;
+}
+
+.scenario-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.7fr;
+  gap: 1.5rem;
+}
+
+.scenario-row:last-child {
+  border-bottom: none;
+}
+
+.scenario-row:nth-child(even) {
+  background: #fbf8f6;
+}
+
+.scenario-label-col {
+  min-width: 0;
+}
+
+.scenario-label {
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: #1d1714;
+}
+
+.scenario-sublabel {
+  font-size: 0.75rem;
+  color: #b7b1ad;
+  margin-top: 0.2rem;
+}
+
+.scenario-data-col {
+  text-align: right;
+  min-width: 0;
+}
+
+.scenario-data-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.5rem;
+  color: #bbb5b0;
+  margin-bottom: 0.25rem;
+}
+
+.scenario-data-value {
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .scenarios-header {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .scenario-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .scenario-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .scenario-data-col {
+    text-align: left;
+  }
+
+  .scenario-data-value {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .scenario-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.positive { color: #12a34a; }
+.negative { color: #b1482f; }
+
+/* Projection section */
+.projection-section {
+  background: #fff;
+  border: 1px solid #e2d9d1;
+  border-radius: 2rem;
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.projection-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #aaa4a0;
+  margin-bottom: 0.5rem;
+}
+
+.projection-subtitle {
+  font-size: 0.85rem;
+  color: #8f8a86;
+  margin-bottom: 2.5rem;
+  line-height: 1.5;
+}
+
+.projection-input-area {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: end;
+}
+
+@media (max-width: 768px) {
+  .projection-input-area { grid-template-columns: 1fr; }
+}
+
+.projection-revenue-display {
+  text-align: right;
+}
+
+.projection-input-wrap {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.projection-number {
+  font-size: clamp(3.5rem, 8vw, 6rem) !important;
+}
+
+.revenue-label {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.65rem;
+  color: #aaa4a0;
+}
+
+.revenue-value {
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: #12a34a;
+  font-weight: 400;
+  margin-top: 1.5rem;
+}
+
+.slider-area {
+  margin-bottom: 2rem;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #e2d9d1;
+  outline: none;
+  margin: 1rem 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1b130f;
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1b130f;
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+input[type="range"]:focus-visible {
+  box-shadow: 0 0 0 2px #f37c2b;
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #bbb5b0;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-box {
+  background: #effdf5;
+  border: 1px solid #aef2c6;
+  border-radius: 1.75rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .result-box { grid-template-columns: 1fr; }
+}
+
+.result-item-label {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.6rem;
+  color: #8f8a86;
+  margin-bottom: 0.75rem;
+}
+
+.result-item-value {
+  font-size: 1.85rem;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.result-item-help {
+  font-size: 0.7rem;
+  color: #aaa4a0;
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
+/* Bottom readouts */
+.bottom-readouts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .bottom-readouts { grid-template-columns: 1fr; }
+}
+
+/* Footer */
+.footer-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #b7b1ad;
+  max-width: 50rem;
+  margin: 2rem auto 0;
+  line-height: 1.5;
+}
+
+/* Focus visible */
+*:focus-visible {
+  outline: 2px solid #f37c2b;
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+/* iPhone / small mobile */
+@media (max-width: 500px) {
+  .wrapper {
+    padding: 1rem;
+  }
+
+  .header-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 10vw, 3.5rem);
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+
+  .input-panel,
+  .breakeven-panel {
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .currency-prefix {
+    font-size: 1.5rem;
+  }
+
+  .number-input {
+    font-size: 1.5rem;
+  }
+
+  .readonly-value {
+    font-size: 1.5rem;
+  }
+
+  .input-wrap {
+    border-radius: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .breakeven-number {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .breakeven-suffix {
+    font-size: 1.1rem;
+  }
+
+  .breakeven-sentence {
+    font-size: 0.85rem;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    border-radius: 1rem;
+    padding: 1rem;
+    min-height: 5.5rem;
+  }
+
+  .summary-card-value {
+    font-size: 1.25rem;
+  }
+
+  .scenarios-section {
+    border-radius: 1.25rem;
+  }
+
+  .projection-section {
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .projection-number {
+    font-size: 2.5rem !important;
+  }
+
+  .revenue-value {
+    font-size: 1.75rem;
+  }
+
+  .result-box {
+    border-radius: 1rem;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .result-item-value {
+    font-size: 1.35rem;
+  }
+
+  .bottom-readouts {
+    gap: 0.6rem;
+  }
+
+  .bottom-readouts .summary-card {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .bottom-readouts .summary-card-value {
+    font-size: 1.1rem;
+  }
+
+  .scale-labels {
+    font-size: 0.6rem;
+  }
+
+  .footer-note {
+    font-size: 0.7rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <header class="header">
+    <div class="header-top-row">
+      <p class="eyebrow" id="eyebrow"></p>
+      <div class="header-controls">
+        <div class="control-group">
+          <div class="segmented" role="radiogroup" aria-label="Language" id="langGroup">
+            <button role="radio" aria-checked="true" data-lang="en">EN</button>
+            <button role="radio" aria-checked="false" data-lang="uk">UA</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="segmented" role="radiogroup" aria-label="Currency" id="currGroup">
+            <button role="radio" aria-checked="true" data-cur="EUR">EUR</button>
+            <button role="radio" aria-checked="false" data-cur="USD">USD</button>
+            <button role="radio" aria-checked="false" data-cur="UAH">UAH</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h1 class="title" id="titleEl"></h1>
+    <p class="subtitle" id="subtitleEl"></p>
+  </header>
+
+  <div class="main-grid">
+    <section class="input-panel">
+      <h2 class="section-heading" id="inputsHeading"></h2>
+      <p class="section-subtitle" id="inputsSubHeading"></p>
+
+      <div class="field">
+        <label class="field-label" for="monthlyInvInput" id="monthlyInvLabel"></label>
+        <div class="input-wrap">
+          <span class="currency-prefix" id="prefix1"></span>
+          <input type="text" inputmode="numeric" class="number-input" id="monthlyInvInput" placeholder="0">
+        </div>
+        <p class="field-help" id="monthlyInvHelp"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="minOrderInput" id="minOrderLabel"></label>
+        <div class="input-wrap">
+          <span class="currency-prefix" id="prefix2"></span>
+          <input type="text" inputmode="numeric" class="number-input" id="minOrderInput" placeholder="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="avgOrderInput" id="avgOrderLabel"></label>
+        <div class="input-wrap">
+          <span class="currency-prefix" id="prefix3"></span>
+          <input type="text" inputmode="numeric" class="number-input" id="avgOrderInput" placeholder="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" id="reqOrdersLabel"></label>
+        <div class="input-wrap readonly">
+          <span class="readonly-value" id="reqOrdersValue" aria-live="polite">—</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="breakeven-panel" aria-live="polite">
+      <div class="decorative-circle"></div>
+      <div id="breakevenContent"></div>
+    </section>
+  </div>
+
+  <div class="summary-cards" id="summaryCards" aria-live="polite"></div>
+
+  <section class="scenarios-section" id="scenariosSection">
+    <div class="scenarios-header">
+      <h2 class="scenarios-heading" id="scenariosHeading"></h2>
+    </div>
+    <div id="scenarioRows"></div>
+  </section>
+
+  <section class="projection-section">
+    <h2 class="projection-heading" id="projectionHeading"></h2>
+    <p class="projection-subtitle" id="projectionSubtitle"></p>
+
+    <div class="projection-input-area">
+      <div>
+        <label class="field-label" for="projectedInput" id="projectedLabel"></label>
+        <div class="input-wrap projection-input-wrap">
+          <input type="text" inputmode="numeric" class="number-input projection-number" id="projectedInput" placeholder="0">
+        </div>
+      </div>
+      <div class="projection-revenue-display">
+        <span class="revenue-label" id="revenueLabel"></span>
+        <span class="revenue-value" id="revenueDisplay" aria-live="polite">—</span>
+      </div>
+    </div>
+
+    <div class="slider-area">
+      <input type="range" id="projSlider" min="0" max="100000" value="0" aria-label="Projected orders">
+      <div class="scale-labels">
+        <span>0</span>
+        <span>33,000</span>
+        <span>66,000</span>
+        <span>100,000</span>
+      </div>
+    </div>
+
+    <div class="result-box" id="resultBox" aria-live="polite"></div>
+  </section>
+
+  <div class="bottom-readouts" id="bottomReadouts" aria-live="polite"></div>
+
+  <footer>
+    <p class="footer-note" id="footerNote"></p>
+  </footer>
+</div>
+
+<script>
+var copy = {
+  en: {
+    languageLabel: "Language",
+    currencyLabel: "Currency",
+    eyebrow: "Pinterest ROI Calculator",
+    title: "When does Pinterest pay back?",
+    subtitle: "Estimate how many orders your brand needs from Pinterest to recover its investment — and how quickly the same channel can start earning beyond break-even.",
+    inputsTitle: "Your numbers",
+    inputsSubtitle: "Enter your monthly Pinterest investment and either minimum or average order value. The calculator starts as soon as one order value is entered.",
+    monthlyPinterestInvestment: "Monthly Pinterest investment",
+    monthlyPinterestInvestmentHelp: "Include invested time converted into money, ad spend, tools, or the cost of a Pinterest managing partner.",
+    minimumOrderValue: "Minimum order value",
+    averageOrderValue: "Average order value",
+    requiredOrders: "Required annual orders from Pinterest",
+    projectedOrdersFromPinterest: "Projected annual orders from Pinterest",
+    monthlyInvestment: "Monthly investment",
+    annualInvestment: "Annual investment",
+    breakEvenPoint: "Break-even point",
+    orders: "orders",
+    waiting: "Enter investment and one order value",
+    chooseValue: "Using",
+    activeValueLabel: "order value",
+    breakEvenSentenceStart: "Your brand needs",
+    breakEvenSentenceStrong: "orders generated through Pinterest",
+    breakEvenSentenceEnd: "in one year to recover an annual investment of",
+    earningSentence: "Every order after that moves the channel beyond break-even and into positive return.",
+    roiScenarios: "Positive growth projections",
+    investmentRecovered: "Investment recovered",
+    fasterEarning: "break-even passed — starts earning faster",
+    growthTarget: "healthy growth scenario",
+    strongPerformance: "strong performance",
+    highGrowthScenario: "high-growth scenario",
+    revenue: "Revenue",
+    netProfitLoss: "Net profit / loss",
+    roi: "ROI",
+    revenueMultiple: "Revenue multiple",
+    revenueMultipleHelp: "How many times projected revenue covers the annual Pinterest investment.",
+    projectionTitle: "Interactive projection",
+    projectionSubtitle: "Move the slider or type projected annual orders from Pinterest. Projection uses whichever order value is available: average first, minimum if average is empty.",
+    valueUsed: "Order value used",
+    ordersNeeded: "Orders needed to recover investment",
+    investmentRecoveredAt: "Investment recovered at",
+    ordersPerMonth: "orders / month",
+    ordersPerYear: "orders / year",
+    annualRevenue: "Annual revenue",
+    annualProfit: "Annual net profit",
+    footerNote: "This calculator is an estimate. It does not replace financial modelling, and it does not include operational costs, taxes, fulfilment costs, ad spend or attribution limits unless you add them into the monthly investment input."
+  },
+  uk: {
+    languageLabel: "Мова",
+    currencyLabel: "Валюта",
+    eyebrow: "Pinterest ROI-калькулятор",
+    title: "Коли Pinterest окупається?",
+    subtitle: "Оцініть, скільки замовлень потрібно отримати з Pinterest, щоб повернути інвестицію — і як швидко канал може почати заробляти після точки окупності.",
+    inputsTitle: "Ваші дані",
+    inputsSubtitle: "Введіть щомісячну інвестицію в Pinterest і мінімальний або середній чек замовлення. Калькулятор починає рахувати, щойно введене одне значення чеку.",
+    monthlyPinterestInvestment: "Щомісячна інвестиція в Pinterest",
+    monthlyPinterestInvestmentHelp: "Включіть час, переведений у гроші, рекламний бюджет, інструменти або вартість партнера, який веде Pinterest.",
+    minimumOrderValue: "Мінімальний чек замовлення",
+    averageOrderValue: "Середній чек замовлення",
+    requiredOrders: "Потрібні річні замовлення з Pinterest",
+    projectedOrdersFromPinterest: "Прогнозовані річні замовлення з Pinterest",
+    monthlyInvestment: "Щомісячна інвестиція",
+    annualInvestment: "Річна інвестиція",
+    breakEvenPoint: "Точка окупності",
+    orders: "замовлень",
+    waiting: "Введіть інвестицію і один чек",
+    chooseValue: "Рахуємо за",
+    activeValueLabel: "чеком",
+    breakEvenSentenceStart: "Вашому бренду потрібно",
+    breakEvenSentenceStrong: "замовлень, згенерованих через Pinterest",
+    breakEvenSentenceEnd: "за рік, щоб повернути річну інвестицію в",
+    earningSentence: "Кожне замовлення після цього переводить канал за межу окупності й у позитивний результат.",
+    roiScenarios: "Позитивні прогнози зростання",
+    investmentRecovered: "Інвестицію повернуто",
+    fasterEarning: "окупність пройдена — канал починає заробляти швидше",
+    growthTarget: "здоровий сценарій зростання",
+    strongPerformance: "сильний результат",
+    highGrowthScenario: "сценарій високого зростання",
+    revenue: "Дохід",
+    netProfitLoss: "Чистий прибуток / збиток",
+    roi: "ROI",
+    revenueMultiple: "Множник доходу",
+    revenueMultipleHelp: "Показує, у скільки разів прогнозований дохід покриває річну інвестицію в Pinterest.",
+    projectionTitle: "Інтерактивний прогноз",
+    projectionSubtitle: "Рухайте слайдер або введіть прогнозовану кількість річних замовлень з Pinterest. Прогноз використовує доступний чек: спершу середній, якщо він порожній — мінімальний.",
+    valueUsed: "Використаний чек",
+    ordersNeeded: "Замовлень потрібно для окупності",
+    investmentRecoveredAt: "Інвестиція повертається при",
+    ordersPerMonth: "замовлень / місяць",
+    ordersPerYear: "замовлень / рік",
+    annualRevenue: "Річний дохід",
+    annualProfit: "Річний чистий прибуток",
+    footerNote: "Цей калькулятор є оцінкою. Він не замінює фінансову модель і не враховує операційні витрати, податки, fulfilment, рекламний бюджет або обмеження атрибуції, якщо ви не додасте їх у щомісячну інвестицію."
+  }
+};
+
+var currencySymbols = { EUR: "€", USD: "$", UAH: "₴" };
+
+var state = {
+  language: "en",
+  currencyCode: "EUR",
+  monthlyInvestment: "",
+  minimumOrderValue: "",
+  averageOrderValue: "",
+  projectedOrders: ""
+};
+
+function t(key) { return copy[state.language][key] || key; }
+function sym() { return currencySymbols[state.currencyCode]; }
+
+function cleanInput(val) {
+  if (val === "") return "";
+  var n = parseFloat(val);
+  if (isNaN(n)) return "0";
+  if (n < 0) return "0";
+  return String(n);
+}
+
+function clampNumber(val, min, max) {
+  var n = parseFloat(val);
+  if (isNaN(n)) return min;
+  return Math.min(Math.max(n, min), max);
+}
+
+function formatMoney(value, withSign) {
+  var n = Math.round(value);
+  var sign = "";
+  if (withSign && n > 0) sign = "+";
+  if (withSign && n < 0) sign = "−";
+  var abs = Math.abs(n);
+  var formatted = abs.toLocaleString("en-US");
+  return sign + sym() + formatted;
+}
+
+function formatNumber(value) {
+  return Math.round(value).toLocaleString("en-US");
+}
+
+function getValues() {
+  var mi = parseFloat(state.monthlyInvestment) || 0;
+  var minO = parseFloat(state.minimumOrderValue) || 0;
+  var avgO = parseFloat(state.averageOrderValue) || 0;
+  var canCalc = mi > 0 && (minO > 0 || avgO > 0);
+  var activeVal = avgO > 0 ? avgO : minO;
+  var annual = mi * 12;
+  var breakEven = activeVal > 0 ? Math.ceil(annual / activeVal) : 0;
+  var projStr = state.projectedOrders;
+  var proj = projStr !== "" ? (parseFloat(projStr) || 0) : breakEven;
+  var revenue = proj * activeVal;
+  var netProfit = revenue - annual;
+  var roi = annual > 0 ? Math.round((netProfit / annual) * 100) : 0;
+  var revMultiple = annual > 0 ? revenue / annual : 0;
+  return {
+    canCalc: canCalc, mi: mi, minO: minO, avgO: avgO,
+    activeVal: activeVal, annual: annual, breakEven: breakEven,
+    proj: proj, revenue: revenue, netProfit: netProfit,
+    roi: roi, revMultiple: revMultiple
+  };
+}
+
+function getScenarios(breakEven) {
+  var raw = [
+    breakEven,
+    breakEven + 1,
+    Math.max(breakEven + 2, Math.ceil(breakEven * 1.5)),
+    Math.max(breakEven + 3, Math.ceil(breakEven * 2)),
+    Math.max(breakEven + 5, Math.ceil(breakEven * 3))
+  ];
+  var unique = [];
+  var seen = {};
+  for (var i = 0; i < raw.length; i++) {
+    if (!seen[raw[i]]) {
+      seen[raw[i]] = true;
+      unique.push(raw[i]);
+    }
+  }
+  unique.sort(function(a, b) { return a - b; });
+  return unique.slice(0, 5);
+}
+
+function scenarioLabel(orders, breakEven, idx) {
+  var label, sub;
+  if (orders === breakEven) {
+    label = t("breakEvenPoint") + " (" + sym() + formatNumber(orders) + ")";
+    sub = t("investmentRecovered");
+  } else if (idx === 1) {
+    label = formatNumber(orders) + " " + t("orders");
+    sub = t("fasterEarning");
+  } else if (idx === 2) {
+    label = formatNumber(orders) + " " + t("orders");
+    sub = t("growthTarget");
+  } else if (idx === 3) {
+    label = formatNumber(orders) + " " + t("orders");
+    sub = t("strongPerformance");
+  } else {
+    label = formatNumber(orders) + " " + t("orders");
+    sub = t("highGrowthScenario");
+  }
+  return { label: label, sub: sub };
+}
+
+function render() {
+  document.documentElement.lang = state.language === "uk" ? "uk" : "en";
+  document.title = t("eyebrow");
+
+  document.getElementById("eyebrow").textContent = t("eyebrow");
+  document.getElementById("langGroup").setAttribute("aria-label", t("languageLabel"));
+  document.getElementById("currGroup").setAttribute("aria-label", t("currencyLabel"));
+  document.getElementById("titleEl").textContent = t("title");
+  document.getElementById("subtitleEl").textContent = t("subtitle");
+  document.getElementById("inputsHeading").textContent = t("inputsTitle");
+  document.getElementById("inputsSubHeading").textContent = t("inputsSubtitle");
+  document.getElementById("monthlyInvLabel").textContent = t("monthlyPinterestInvestment");
+  document.getElementById("monthlyInvHelp").textContent = t("monthlyPinterestInvestmentHelp");
+  document.getElementById("minOrderLabel").textContent = t("minimumOrderValue");
+  document.getElementById("avgOrderLabel").textContent = t("averageOrderValue");
+  document.getElementById("reqOrdersLabel").textContent = t("requiredOrders");
+  document.getElementById("projectedLabel").textContent = t("projectedOrdersFromPinterest");
+  document.getElementById("revenueLabel").textContent = t("revenue");
+  document.getElementById("scenariosHeading").textContent = t("roiScenarios");
+  document.getElementById("projectionHeading").textContent = t("projectionTitle");
+  document.getElementById("projectionSubtitle").textContent = t("projectionSubtitle");
+  document.getElementById("footerNote").textContent = t("footerNote");
+
+  var s = sym();
+  document.getElementById("prefix1").textContent = s;
+  document.getElementById("prefix2").textContent = s;
+  document.getElementById("prefix3").textContent = s;
+
+  var langBtns = document.querySelectorAll("#langGroup [role='radio']");
+  langBtns.forEach(function(b) {
+    b.setAttribute("aria-checked", b.dataset.lang === state.language ? "true" : "false");
+  });
+  var curBtns = document.querySelectorAll("#currGroup [role='radio']");
+  curBtns.forEach(function(b) {
+    b.setAttribute("aria-checked", b.dataset.cur === state.currencyCode ? "true" : "false");
+  });
+
+  var v = getValues();
+
+  document.getElementById("reqOrdersValue").textContent = v.canCalc ? formatNumber(v.breakEven) : "—";
+
+  var beContent = document.getElementById("breakevenContent");
+  if (!v.canCalc) {
+    beContent.innerHTML = '<p class="waiting-message">' + t("waiting") + '</p>';
+  } else {
+    beContent.innerHTML =
+      '<p class="breakeven-label">' + t("breakEvenPoint") + '</p>' +
+      '<p class="breakeven-number">' + formatNumber(v.breakEven) + '</p>' +
+      '<p class="breakeven-suffix">' + t("orders") + '</p>' +
+      '<p class="breakeven-sentence">' +
+        t("breakEvenSentenceStart") + ' <strong>' + formatNumber(v.breakEven) + ' ' + t("breakEvenSentenceStrong") + '</strong> ' +
+        t("breakEvenSentenceEnd") + ' ' + formatMoney(v.annual, false) + '.' +
+      '</p>' +
+      '<p class="earning-sentence">' + t("earningSentence") + '</p>';
+  }
+
+  var cardsHtml = "";
+  var cardData = [
+    { label: t("monthlyInvestment"), value: v.canCalc ? formatMoney(v.mi, false) : "—" },
+    { label: t("annualInvestment"), value: v.canCalc ? formatMoney(v.annual, false) : "—" },
+    { label: t("activeValueLabel"), value: v.canCalc ? formatMoney(v.activeVal, false) : "—" },
+    { label: t("breakEvenPoint"), value: v.canCalc ? formatNumber(v.breakEven) : "—" }
+  ];
+  for (var i = 0; i < cardData.length; i++) {
+    cardsHtml += '<div class="summary-card"><p class="summary-card-label">' +
+      cardData[i].label + '</p><p class="summary-card-value">' + cardData[i].value + '</p></div>';
+  }
+  document.getElementById("summaryCards").innerHTML = cardsHtml;
+
+  var scenarioContainer = document.getElementById("scenarioRows");
+  if (!v.canCalc) {
+    scenarioContainer.innerHTML = '<div style="color:#aaa4a0;text-align:center;padding:2rem">' + t("waiting") + '</div>';
+  } else {
+    var scenarios = getScenarios(v.breakEven);
+    var rowsHtml = "";
+    for (var j = 0; j < scenarios.length; j++) {
+      var sc = scenarios[j];
+      var sl = scenarioLabel(sc, v.breakEven, j);
+      var scRev = sc * v.activeVal;
+      var scProfit = scRev - v.annual;
+      var scRoi = v.annual > 0 ? Math.round((scProfit / v.annual) * 100) : 0;
+      var profitClass = scProfit >= 0 ? "positive" : "negative";
+      var roiClass = scRoi >= 0 ? "positive" : "negative";
+      rowsHtml += '<div class="scenario-row">' +
+        '<div class="scenario-label-col">' +
+          '<div class="scenario-label">' + sl.label + '</div>' +
+          '<div class="scenario-sublabel">' + sl.sub + '</div>' +
+        '</div>' +
+        '<div class="scenario-metrics">' +
+          '<div class="scenario-data-col">' +
+            '<div class="scenario-data-label">' + t("annualRevenue") + '</div>' +
+            '<div class="scenario-data-value">' + formatMoney(scRev, false) + '</div>' +
+          '</div>' +
+          '<div class="scenario-data-col">' +
+            '<div class="scenario-data-label">' + t("annualProfit") + '</div>' +
+            '<div class="scenario-data-value ' + profitClass + '">' + formatMoney(scProfit, true) + '</div>' +
+          '</div>' +
+          '<div class="scenario-data-col">' +
+            '<div class="scenario-data-label">' + t("roi") + '</div>' +
+            '<div class="scenario-data-value ' + roiClass + '">' + (scRoi >= 0 ? "+" : "") + scRoi + '%</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+    scenarioContainer.innerHTML = rowsHtml;
+  }
+
+  var slider = document.getElementById("projSlider");
+  if (state.projectedOrders !== "") {
+    slider.value = clampNumber(state.projectedOrders, 0, 100000);
+  } else if (v.canCalc) {
+    slider.value = Math.min(v.breakEven, 100000);
+  } else {
+    slider.value = 0;
+  }
+
+  document.getElementById("revenueDisplay").textContent = v.canCalc ? formatMoney(v.revenue, false) : "—";
+
+  var resultBox = document.getElementById("resultBox");
+  if (!v.canCalc) {
+    resultBox.innerHTML =
+      '<div><p class="result-item-label">' + t("netProfitLoss") + '</p><p class="result-item-value">—</p></div>' +
+      '<div><p class="result-item-label">' + t("roi") + '</p><p class="result-item-value">—</p></div>' +
+      '<div><p class="result-item-label">' + t("revenueMultiple") + '</p><p class="result-item-value">—</p></div>';
+  } else {
+    var npClass = v.netProfit >= 0 ? "positive" : "negative";
+    var roiClass2 = v.roi >= 0 ? "positive" : "negative";
+    resultBox.innerHTML =
+      '<div><p class="result-item-label">' + t("netProfitLoss") + '</p><p class="result-item-value ' + npClass + '">' + formatMoney(v.netProfit, true) + '</p></div>' +
+      '<div><p class="result-item-label">' + t("roi") + '</p><p class="result-item-value ' + roiClass2 + '">' + (v.roi >= 0 ? "+" : "") + v.roi + '%</p></div>' +
+      '<div><p class="result-item-label">' + t("revenueMultiple") + '</p><p class="result-item-value">' + v.revMultiple.toFixed(2) + '×</p><p class="result-item-help">' + t("revenueMultipleHelp") + '</p></div>';
+  }
+
+  var brHtml = "";
+  var brData = [
+    { label: t("valueUsed"), value: v.canCalc ? formatMoney(v.activeVal, false) : "—" },
+    { label: t("ordersNeeded"), value: v.canCalc ? formatNumber(v.breakEven) + " " + t("ordersPerYear") : "—" },
+    { label: t("investmentRecoveredAt"), value: v.canCalc ? formatNumber(v.breakEven) + " " + t("ordersPerYear") + " · " + formatNumber(Math.ceil(v.breakEven / 12)) + " " + t("ordersPerMonth") : "—" }
+  ];
+  for (var k = 0; k < brData.length; k++) {
+    brHtml += '<div class="summary-card"><p class="summary-card-label">' + brData[k].label + '</p><p class="summary-card-value">' + brData[k].value + '</p></div>';
+  }
+  document.getElementById("bottomReadouts").innerHTML = brHtml;
+}
+
+document.querySelectorAll("#langGroup [role='radio']").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    state.language = btn.dataset.lang;
+    if (state.language === "uk") state.currencyCode = "UAH";
+    render();
+  });
+});
+
+document.querySelectorAll("#currGroup [role='radio']").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    state.currencyCode = btn.dataset.cur;
+    render();
+  });
+});
+
+document.getElementById("monthlyInvInput").addEventListener("input", function(e) {
+  state.monthlyInvestment = cleanInput(e.target.value.replace(/[^0-9.]/g, ""));
+  render();
+});
+
+document.getElementById("minOrderInput").addEventListener("input", function(e) {
+  state.minimumOrderValue = cleanInput(e.target.value.replace(/[^0-9.]/g, ""));
+  render();
+});
+
+document.getElementById("avgOrderInput").addEventListener("input", function(e) {
+  state.averageOrderValue = cleanInput(e.target.value.replace(/[^0-9.]/g, ""));
+  render();
+});
+
+document.getElementById("projectedInput").addEventListener("input", function(e) {
+  state.projectedOrders = cleanInput(e.target.value.replace(/[^0-9.]/g, ""));
+  render();
+});
+
+document.getElementById("projSlider").addEventListener("input", function(e) {
+  state.projectedOrders = String(parseInt(e.target.value, 10));
+  document.getElementById("projectedInput").value = state.projectedOrders;
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>
