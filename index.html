@@ -1250,6 +1250,7 @@ function render() {
   }
 
   var slider = document.getElementById("projSlider");
+  var projInput = document.getElementById("projectedInput");
   if (state.projectedOrders !== "") {
     slider.value = clampNumber(state.projectedOrders, 0, 100000);
   } else if (v.canCalc) {
